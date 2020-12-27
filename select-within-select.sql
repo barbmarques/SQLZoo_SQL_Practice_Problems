@@ -94,11 +94,67 @@ WHERE area >= ALL (SELECT area FROM world y
 
 SELECT continent, name
 FROM world x
-WHERE name <= ALL(SELECT name FROM world y
-				WHERE y.continent=x.continent);
+WHERE name <= ALL
+	(	SELECT name 
+		FROM world y
+		WHERE y.continent=x.continent
+		);
+
+
+#NOTES from QUIZ
+
+#1. Show the name, region and population of the smallest country in each region
+
+SELECT region, name, population 
+FROM bbc x 
+WHERE population <= ALL 
+	(	SELECT population 
+		FROM bbc y 
+		WHERE y.region=x.region 
+		AND population>0
+		);
+
+
+#2. Show the countries belonging to regions with all populations over 50000
+
+ SELECT name,region,population 
+ FROM bbc x WHERE 50000 < ALL 
+ 	(	SELECT population 
+ 		FROM bbc y 
+ 		WHERE x.region=y.region 
+ 		AND y.population>0
+ 		);
 
 
 
-   
+#3. Show the countries with a less than a third of the population of the countries around it
+
+SELECT name, region
+FROM bbc x
+WHERE population < ALL
+	(	SELECT population/3
+		FROM bbc y
+		WHERE y.region = x.region
+		AND y.name != x.name
+		);
+		
+		
+#5 Show the countries with a greater GDP than any country in Africa (some countries may have NULL GDP values)
+
+SELECT name
+FROM bbc
+WHERE gdp > ALL 
+	(	SELECT gdp 
+		FROM bbc 
+		WHERE region='Africa'  
+		AND gdp <> NULL
+		);
+		
+		
+#6 Show the countries with population smaller than Russia but bigger than Denmark;
+
+SELECT name
+FROM bbc
+WHERE population < (SELECT population FROM bbc WHERE name="Russia") AND population > (SELECT population FROM bbc WHERE name="Denmark")
 
 
