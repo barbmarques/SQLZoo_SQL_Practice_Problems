@@ -105,4 +105,4 @@ SELECT mdate,team1,
   team2, 
   CASE WHEN teamid=team2 THEN 1 ELSE 0 END score2
   FROM game JOIN goal ON matchid = id
-accessible
+

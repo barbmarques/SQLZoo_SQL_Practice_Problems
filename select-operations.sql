@@ -1,74 +1,66 @@
-# PRACTICE WITH SELECT OPERATIONS:
- -- concatenate columns
- -- like
- -- union
- -- apostrophe
- -- full text search
- -- column name
- -- equi join
- -- column name with spaces
- -- null
- 
-# CONCATENATE COLUMNS - CONCAT
- 
- SELECT CONCAT (region, name). # would have to add ' ' to put a space between the two columns
- FROM bbc; 
- 
-# LIKE - The like command allows "wild cards". % may be use to match string, _ will match any single character
- 
-#Ex:  Show countries beginning with Z
- 
- SELECT name
- FROM bbc
- WHERE name LIKE 'Z%';
- 
- 
-# UNION:  you can enter a number of SELECT statements separated by the UNION key word
-
-SELECT name 
-	FROM bbc WHERE name LIKE 'Z%'
-UNION
-SELECT name
-	FROM world WHERE name LIKE 'So%';
-	
-
-# APOSTROPHE -
-# To include a statement with a word containing an apostrophe, such as Cote d'Ivoire
-
-SELECT * 
-FROM world
-WHERE name='Cote d''Ivoire';
-
-		# Or Tom's Book:
-
-		SELECT 'Tom''s Book';
+#Sum and Count 
+#This is practice with aggregate functions such as COUNT, SUM, MAX and AVG. Aggregate function means that it takes in many values and delivers just one value. These functions are e ven more useful when used with the GROUP BY clause).
 
 
-# FULL TEXT SEARCH:  Ex: find a specific word in any column of the table -- the word you are searching for should be single-quoted and placed between two wild cards
+#DISTINCT: By default the result of a SELECT may contain duplicate rows. We can remove these duplicates using the DISTINCT key words
 
-SELECT name
-FROM world
-WHERE name LIKE '%the%';
+#ORDER BY: Order by permits us to see the result of a SELECT in any particular order -- ASC or DESC 
+
+#1. Select the TOTAL population and the TOTAL GDP of Europe
+
+SELECT SUM(population) AS "Total Pop", SUM(gdp) AS "Total GDP"
+FROM bbc
+WHERE region='Europe';
 
 
-# COLUMN NAME: Use AS to specify a column name
+#2. Show all the regions in BBC
 
-SELECT region, SUM(Population) AS Total_Population
+SELECT DISTINCT region
+FROM bbc;
+
+#3. Show the name and population for each country with a population of more than 100000000. Show countries in descending order of population.
+
+SELECT name, population
+FROM bbc
+WHERE population > 100000000
+ORDER BY population DESC;
+
+
+#SUM AND COUNT QUIZ
+
+#1 SHOW THE SUM OF POPULATION OF ALL COUNTRIES IN 'EUROPE'
+
+SELECT SUM(Population)
+FROM bbc
+WHERE region = 'Europe';
+
+#2. Show the number of countries with population smaller than 150,000
+
+SELECT COUNT(name)
+FROM bbc
+WHERE population < 150000;
+
+#3 THE core SQL aggregate functions are: AVG(), COUNT(), MAX(), MIN(), SUM()
+
+#5 Show the average population of Poland, Germany and Denmark
+
+SELECT AVG(population)
+FROM bbc
+WHERE name IN ('Poland', 'Germany', 'Denmark');
+
+
+#6 Show the population density of each region
+
+SELECT region, SUM(population)/SUM(area) as Density
 FROM bbc
 GROUP BY region;
 
 
-# EQUI JOIN - can be used to join two tables with the same name
+#7 Show the name and population density of the country with the largest population
 
-# COLUMN NAMES WITH SPACES -- use back ticks to access columns where the name contains a space 
-
-# NULL -- the null value indicates missing or unknown data.  The phrase "IS NULL" is used to select these values
-
-SELECT name,gdp
-FROM world
-WHERE gdp IS NULL
-
-
+SELECT name, population/area AS density
+FROM bbc
+WHERE population = (SELECT MAX(population) FROM bbc); 
 
 
 
