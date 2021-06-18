@@ -1,4 +1,4 @@
-#Using Nested SELECTS -- includes correlated subqueries
+#Using Nested SELGIDECTS -- includes correlated subqueries
 
 #1. List each country name where the population is larger than that of Russia.
 
@@ -155,6 +155,12 @@ WHERE gdp > ALL
 
 SELECT name
 FROM bbc
-WHERE population < (SELECT population FROM bbc WHERE name="Russia") AND population > (SELECT population FROM bbc WHERE name="Denmark")
+WHERE population < (SELECT population 
+		FROM bbc 
+		WHERE name="Russia"
+		) 
+AND population > (SELECT population 
+	FROM bbc 
+	WHERE name="Denmark");
 
 
